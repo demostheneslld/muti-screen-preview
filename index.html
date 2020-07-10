@@ -1,59 +1,146 @@
-<style>
-    .mobile {
-        border-top: 25px solid black;
-        border-bottom: 25px solid black;
-        border-left: 5px solid black;
-        border-right: 5px solid black;
-        overflow: hidden;
-    }
-    .computer {
-        border-top: 25px solid grey;
-        border-bottom: 25px solid grey;
-        border-left: 5px solid grey;
-        border-right: 5px solid grey;
-    }
+<html>
+    <head>
+        <style>
+            /* OVERALL STYLES */
+            body {
+                font-family: sans-serif;
+                background-color: white;
+                color: #797979;
+            }
+        
+            /* STYLES FOR SIMULATED SCREENS */
+            .mobile {
+                border-top: 25px solid black;
+                border-bottom: 25px solid black;
+                border-left: 5px solid black;
+                border-right: 5px solid black;
+                overflow: hidden;
+            }
+            .computer {
+                border-top: 25px solid grey;
+                border-bottom: 25px solid grey;
+                border-left: 5px solid grey;
+                border-right: 5px solid grey;
+            }
+            .simscreen-holder {
+                float:left;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .simscreen {
+                background-color: #ccc;
+                border-radius: 15px;
+                margin: 0px 10px 5px 0px;
+            }
+            
+            /* STYLES FOR INPUT */
+            /* https://lincolnloop.com/blog/smarter-input-groups-flexbox/ */
+            /* https://codepen.io/mtrythall/pen/OPyXWm?__cf_chl_jschl_tk__=8544fb3061c5241f2ed21467454475dc5d8adf40-1594416401-0-AchUy5b8bvaPcobWug6ZjJ-ZbRq2BynPiAojnfg1GSibENESGluWkQf4WUbkZjwSHYtS5f1rZBIyedSyXMTgoOzIuRFYRDyEFInEzvC6emsQPMhmmdhJ_h2Wm4mur1vU3-OqrCK9vPzYmgJ94httdoPoSFB8vBqDPeG6l3Htqbj7H52CW3qAiZUUOu-KUEBYE5mRZDuesICM4kiCCWnFIvF3auxICAwvWXFHTmHUCh-qyncbws3nqxe5Rea_K2XTysvUp_lwN80t1BXsAHW6ETvB1wzlswHi9GnFmYobgMGPBZMcP40JUm0Natk4zFbwt5cJjHzArVcskI2i0doFAK_vfwBsdyvEfbuV9HCZecve */
+            /* Layout */
+            .Field {
+                display: flex;
+            }
+            .SearchBox-query {
+                /* Shrink and grow as needed, but never shrink so
+                    small that we can't read the placeholder */
+                flex: 1 0 8em;
+            }
+            .SearchBox-submitBtn {
+                /* Never shrink or grow */
+                flex: 0 0 auto;
+                cursor: pointer;
+            }
+            .Field--is-search:before {
+                /* Don't shrink or grow and use a default size */
+                flex: 0 0 2.75em;
+            }
+            /* Looks */
+            input,
+            button,
+            .SearchBox:before,
+            .Field--is-search:before {
+                padding: .35em .75em;
+                border: none;
+                font-size: 1.1rem;
+                text-decoration: none;
+            }
+            .SearchBox {
+                margin: 3rem auto 0;
+                max-width: 80%;
+            }
+            .Field--is-search:before {
+                border-radius: 2px 0 0 2px;
+                background: #ccc;
+                content: "https://";
+            }
+            .SearchBox-query {
+                background: #e9e9e9;
+                /* // Make sure the placeholder isn't poorly cut off */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .SearchBox-query:focus {
+                background: white;
+            }
+            .SearchBox-submitBtn {
+                border-radius: 0 2px 2px 0;
+                background: #ccc;
+                color: inherit
+            }
+            .SearchBox-submitBtn:hover {
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
 
-    .simscreen-holder {
-        float:left;
-        text-align: center;
-        margin-bottom: 10px;
-    }
-    .simscreen {
-        border-radius: 15px;
-        margin: 0px 0px 5px 10px;
-    }
+        <div class="Field Field--is-search">
+            <input
+            id="url"
+            placeholder="Input a URL here to preview on multiple devices..."
+            class="SearchBox-query"/>
+        
+            <button
+            type="submit"
+            class="Btn SearchBox-submitBtn">Update Previews</button>
+        </div>
 
-    #url {
-        width: 500px;
-    }
-</style>
+        <br style="clear:both"/>
+        <i>You can zoom out on your browser (CTRL + "-") to see more screens at once</i>
+        <br style="clear:both"/>
+        <br style="clear:both"/>
 
-Input a URL to Preview on Multiple Devices:
-<input id="url" type="text"/>
-<button onclick="applyUrlChange()">Preview URL</button>
+        <div class='simscreen-holder'><iframe class='simscreen mobile' src="" style="width: 2.89in; height: 5.55in"></iframe><br/>iPhone</div>
+        <div class='simscreen-holder'><iframe class='simscreen mobile' src="" style="width: 9.2in; height: 6.57in"></iframe><br/>iPad</div>
+        <div class='simscreen-holder'><iframe class='simscreen computer' src="" style="width: 31cm; height: 17.43cm"></iframe><br/>Laptop</div>
+        <div class='simscreen-holder'><iframe class='simscreen computer' src="" style="width: 20in; height: 12.5in"></iframe><br/>Monitor</div>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlInput = document.getElementById('url');
+            urlInput.value = urlParams.get('url') || '';
+            applyUrlChange();
+            function applyUrlChange() {
+                const currentUrl = urlInput.value;
+                const simscreens = document.getElementsByClassName('simscreen');
 
-<br style="clear:both"/>
-<i>You can zoom out on your browser (CTRL + "-") to see more screens at once</i>
-<br style="clear:both"/>
-<br style="clear:both"/>
-
-<div class='simscreen-holder'><iframe class='simscreen mobile' src="" style="width: 2.89in; height: 5.55in"></iframe><br/>iPhone</div>
-<div class='simscreen-holder'><iframe class='simscreen mobile' src="" style="width: 9.2in; height: 6.57in"></iframe><br/>iPad</div>
-<div class='simscreen-holder'><iframe class='simscreen computer' src="" style="width: 31cm; height: 17.43cm"></iframe><br/>Laptop</div>
-<div class='simscreen-holder'><iframe class='simscreen computer' src="" style="width: 20in; height: 12.5in"></iframe><br/>Monitor</div>
-
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    document.getElementById('url').value = urlParams.get('url') || '';
-    applyUrlChange();
-    function applyUrlChange() {
-        const currentUrl = document.getElementById('url').value;
-        const simscreens = document.getElementsByClassName('simscreen');
-
-        for (const s of simscreens) {
-            s.setAttribute('src', currentUrl);
-            urlParams.set('url', currentUrl);
-            window.history.replaceState({}, '', `${location.pathname}?${urlParams.toString()}`);
-        }
-    }
-</script>
+                for (const s of simscreens) {
+                    s.setAttribute('src', 'https://' + currentUrl);
+                    urlParams.set('url', currentUrl);
+                    window.history.replaceState({}, '', `${location.pathname}?${urlParams.toString()}`);
+                }
+            }
+            // Execute a function when the user releases a key on the keyboard
+            urlInput.addEventListener("keyup", function(event) {
+                console.log('Event Triggered');
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    // Trigger the button element with a click
+                    applyUrlChange();
+                }
+            });
+        </script>
+    </body>
+</html> 
