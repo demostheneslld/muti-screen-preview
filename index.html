@@ -1,0 +1,59 @@
+<style>
+    .mobile {
+        border-top: 25px solid black;
+        border-bottom: 25px solid black;
+        border-left: 5px solid black;
+        border-right: 5px solid black;
+        overflow: hidden;
+    }
+    .computer {
+        border-top: 25px solid grey;
+        border-bottom: 25px solid grey;
+        border-left: 5px solid grey;
+        border-right: 5px solid grey;
+    }
+
+    .simscreen-holder {
+        float:left;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .simscreen {
+        border-radius: 15px;
+        margin: 0px 0px 5px 10px;
+    }
+
+    #url {
+        width: 500px;
+    }
+</style>
+
+Input a URL to Preview on Multiple Devices:
+<input id="url" type="text"/>
+<button onclick="applyUrlChange()">Preview URL</button>
+
+<br style="clear:both"/>
+<i>You can zoom out on your browser (CTRL + "-") to see more screens at once</i>
+<br style="clear:both"/>
+<br style="clear:both"/>
+
+<div class='simscreen-holder'><iframe class='simscreen mobile' src="" style="width: 2.89in; height: 5.55in"></iframe><br/>iPhone</div>
+<div class='simscreen-holder'><iframe class='simscreen mobile' src="" style="width: 9.2in; height: 6.57in"></iframe><br/>iPad</div>
+<div class='simscreen-holder'><iframe class='simscreen computer' src="" style="width: 31cm; height: 17.43cm"></iframe><br/>Laptop</div>
+<div class='simscreen-holder'><iframe class='simscreen computer' src="" style="width: 20in; height: 12.5in"></iframe><br/>Monitor</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById('url').value = urlParams.get('url') || '';
+    applyUrlChange();
+    function applyUrlChange() {
+        const currentUrl = document.getElementById('url').value;
+        const simscreens = document.getElementsByClassName('simscreen');
+
+        for (const s of simscreens) {
+            s.setAttribute('src', currentUrl);
+            urlParams.set('url', currentUrl);
+            window.history.replaceState({}, '', `${location.pathname}?${urlParams.toString()}`);
+        }
+    }
+</script>
